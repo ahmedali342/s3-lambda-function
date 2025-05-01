@@ -15,15 +15,17 @@ orbs:
 jobs:
   deploy_to_s3:
     executor: python-executor
+    environment:
+      AWS_REGION: ap-south-1    
     steps:
       - checkout
       - aws-cli/setup:
-          aws-region: ap-south-1   # Use your region here
+          aws-region: AWS_REGION   # Use your region here
       - run:
           name: Deploy Python script to S3
           command: |
             # Upload the Python script to S3
-            aws s3 cp my_script.py s3://s3/buckets/my-circleci-artifacts-dev/my_script.py
+            aws s3 cp my_script.py s3://my-circleci-artifacts-dev/my_script.py
             # Persist the script to workspace for the next job
             mkdir -p ~/repo/workspace
             cp my_script.py ~/repo/workspace/my_script.py
@@ -34,10 +36,12 @@ jobs:
 
   deploy_to_lambda:
     executor: python-executor
+    environment:
+      AWS_REGION: ap-south-1     
     steps:
       - checkout
       - aws-cli/setup:
-          aws-region: ap-south-1  # Use your region here
+          aws-region: AWS_REGION  # Use your region here
       - attach_workspace:
           at: /workspace
       - run:
