@@ -49,8 +49,9 @@ jobs:
           command: |
             cd ~/repo/workspace
             # The Python script is now available at /workspace/my_script.py
+            ls -al ~/repo/workspace
             zip my_script.zip my_script.py
-            aws lambda update-function-code --function-name my-new-lambda-function --zip-file fileb:///workspace/my_script.zip
+            aws lambda update-function-code --function-name my-new-lambda-function --zip-file fileb://my_script.zip
 
 # Define workflows
 workflows:
