@@ -43,7 +43,7 @@ jobs:
       - aws-cli/setup:
           aws-region: AWS_REGION  # Use your region here
       - attach_workspace:
-          at: /repo/workspace
+          at: ~/repo/workspace
       - run:
           name: Deploy Python script to Lambda
           command: |
