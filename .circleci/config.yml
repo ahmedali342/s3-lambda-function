@@ -48,7 +48,7 @@ jobs:
           name: Deploy Python script to Lambda
           command: |
             # The Python script is now available at /workspace/my_script.py
-            zip /workspace/my_script.zip /workspace/my_script.py
+            zip /repo/workspace/my_script.zip /repo/workspace/my_script.py
             aws lambda update-function-code --function-name my-new-lambda-function --zip-file fileb:///workspace/my_script.zip
 
 # Define workflows
