@@ -30,7 +30,7 @@ jobs:
             mkdir -p ~/repo/workspace
             cp my_script.py ~/repo/workspace/my_script.py  
       - persist_to_workspace:
-          root: /repo
+          root: ~/repo
           paths:
             - my_script.py
 
