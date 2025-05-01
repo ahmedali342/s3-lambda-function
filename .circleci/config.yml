@@ -21,7 +21,6 @@ jobs:
       - checkout
       - aws-cli/setup:
           aws-region: AWS_REGION   # Use your region here
-          role-arn: arn:aws:iam::345594600514:role/oidc-s3-lambda-role
       - run:
           name: Deploy Python script to S3
           command: |
@@ -43,7 +42,6 @@ jobs:
       - checkout
       - aws-cli/setup:
           aws-region: AWS_REGION  # Use your region here
-          role-arn: arn:aws:iam::345594600514:role/oidc-s3-lambda-role
       - attach_workspace:
           at: /workspace
       - run:
@@ -58,7 +56,9 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - deploy_to_s3
+      - deploy_to_s3:
+          context: dev
       - deploy_to_lambda:
+          context: dev
           requires:
             - deploy_to_s3
