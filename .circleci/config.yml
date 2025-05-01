@@ -18,7 +18,7 @@ jobs:
     steps:
       - checkout
       - aws-cli/setup:
-          aws-region: eu-west-2  # Use your region here
+          aws-region: ap-south-1   # Use your region here
       - run:
           name: Deploy Python script to S3
           command: |
@@ -37,7 +37,7 @@ jobs:
     steps:
       - checkout
       - aws-cli/setup:
-          aws-region: eu-west-2  # Use your region here
+          aws-region: ap-south-1  # Use your region here
       - attach_workspace:
           at: /workspace
       - run:
