@@ -1,0 +1,58 @@
+version: 2.1
+
+# Define the executor
+executors:
+  python-executor:
+    docker:
+      - image: circleci/python:3.8
+    working_directory: ~/repo
+
+# Import the AWS CLI orb
+orbs:
+  aws-cli: circleci/aws-cli@2.0.4
+
+# Define the jobs
+jobs:
+  deploy_to_s3:
+    executor: python-executor
+    steps:
+      - checkout
+      - aws-cli/setup:
+          aws-region: eu-west-2  # Use your region here
+      - run:
+          name: Deploy Python script to S3
+          command: |
+            # Upload the Python script to S3
+            aws s3 cp my_script.py s3://s3/buckets/my-circleci-artifacts-dev/my_script.py
+            # Persist the script to workspace for the next job
+            mkdir -p ~/repo/workspace
+            cp my_script.py ~/repo/workspace/my_script.py
+      - persist_to_workspace:
+          root: ~/repo/workspace
+          paths:
+            - my_script.py
+
+  deploy_to_lambda:
+    executor: python-executor
+    steps:
+      - checkout
+      - aws-cli/setup:
+          aws-region: eu-west-2  # Use your region here
+      - attach_workspace:
+          at: /workspace
+      - run:
+          name: Deploy Python script to Lambda
+          command: |
+            # The Python script is now available at /workspace/my_script.py
+            zip /workspace/my_script.zip /workspace/my_script.py
+            aws lambda update-function-code --function-name my-new-lambda-function --zip-file fileb:///workspace/my_script.zip
+
+# Define workflows
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy_to_s3
+      - deploy_to_lambda:
+          requires:
+            - deploy_to_s3
